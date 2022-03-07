@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class GætTal {
 
+
     private int hemmeligtTal;
     private int max;
     private int antalGæt;
@@ -14,16 +15,17 @@ public class GætTal {
     private int senesteGæt;
     private int score;
 
-    public GætTal(){
+    private static GætTal instance;
+
+    private GætTal(){
         max = 100;
         nulstil();
     }
 
-    public GætTal(int maximum){
-        max = maximum;
-        nulstil();
+    public static GætTal getInstance(){
+        if (instance == null) instance = new GætTal();
+        return instance;
     }
-
     public void gæt(int tal){
         antalGæt++;
         if(tal == hemmeligtTal) gættetRigtigt = true;
