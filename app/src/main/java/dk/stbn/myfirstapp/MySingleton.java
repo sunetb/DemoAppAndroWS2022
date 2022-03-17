@@ -12,4 +12,5 @@ public class MySingleton extends Application {
         app = this;
         System.out.println("Android singleton");
     }
+
 }
