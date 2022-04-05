@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
@@ -20,11 +21,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button b, hello;
     TextView hi, nameTV;
     EditText nameET;
+
+    Button[] buttons = new Button[50];
 
     GætTal game = GætTal.getInstance();
     String username;
@@ -34,6 +39,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        System.out.println("Res "+R.layout.activity_main);
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = new Button(this);
+
+        }
 
         //Get the SharedPreferences object that you can tead and write data to. Is stored on disk
         mySp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -42,6 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean hasTheUserLoggedIn = mySp.getBoolean("loggedIn", false);
 
         System.out.println("logged in?: "+hasTheUserLoggedIn);
+
+        FetchUserList ful = new FetchUserList();
+        ful.execute();
+
+
+
+
+
   /*
         String name = "Sune";
 
@@ -57,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         game.setMax(2000);
         b = findViewById(R.id.welcome);
         b.setOnClickListener(this);
+
         hello = findViewById(R.id.button2);
         hello.setOnClickListener(this);
         hi = findViewById(R.id.textView);
@@ -69,14 +89,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v == b) {
+        if (v.getId() == R.id.welcome) {
 //DO NOT instantiate activities yourself !!!!             new AppCompatActivity()
             username = nameET.getText().toString();
-            int number = Integer.parseInt(username);
-            game.gæt(number);
-            //Intent myIntent = new Intent(this, Menu.class);
-            //myIntent.putExtra("username", username);
-            //startActivity(myIntent);
+           // int number = Integer.parseInt(username);
+           // game.gæt(number);
+            Intent myIntent = new Intent(this, Menu.class);
+            myIntent.putExtra("username", username);
+            startActivity(myIntent);
 
             //Writing to SharedPreferences
             mySp.edit().putBoolean("loggedIn", true).apply();
@@ -84,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //get the username
             username = "www.ruc.dk";
 
-
+/*
             // Share string with intent
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
@@ -97,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (ActivityNotFoundException e) {
                 // Define what your app should do if no activity can handle the intent.
             }
-
+*/
         }
         else{
             mySp.edit().putBoolean("loggedIn", false).apply();
